@@ -316,13 +316,13 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
         LSFT_T(KC_CAPS), KC_Z,  KC_X,    KC_C,    KC_V,    KC_B,  MO(2),
         KC_LCTL, KC_LALT, KC_LEFT, KC_RIGHT, KC_LGUI,
         //pouce
-        MO(2), KC_TRNS, KC_HOME,  KC_BSPC, KC_DEL, KC_END,
+        MO(1), KC_TRNS, KC_HOME,  KC_BSPC, KC_DEL, KC_END,
 
         //right
         KC_6,    KC_7,    KC_8,    KC_9,    KC_0,   KC_EQL, KC_MINS,
         KC_RBRC, KC_Y,    KC_U,    KC_I,    KC_O,   KC_P,   KC_BSLS,
         KC_H,     KC_J,    KC_K,    KC_L,    KC_SCLN, KC_QUOT,
-        MO(2),    KC_N,    KC_M,    KC_COMM, KC_DOT,  KC_SLSH, KC_RSFT,
+        OSL(2),    KC_N,    KC_M,    KC_COMM, KC_DOT,  KC_SLSH, KC_RSFT,
         KC_UP,    KC_DOWN, KC_LBRC,   KC_RBRC, KC_RALT,
         //pouce
         KC_INS,    KC_DEL,   KC_PGUP, KC_PGDN, KC_ENTER, KC_SPC
