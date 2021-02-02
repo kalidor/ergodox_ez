@@ -12,6 +12,3 @@ To make use of this file you will need follow the following steps:
 
 More information can be found in the QMK docs: <https://docs.qmk.fm>
 
-## Important
-
-- `qmk_firmware/keyboards/ergodox_ez/config.h` should be edited to comment `UNICODE_KEY_LNX UC_LNX`
