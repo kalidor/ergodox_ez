@@ -21,6 +21,12 @@ void led_set_user(uint8_t usb_led) {
     }
 };
 
+enum unicode_names {
+    JAPANSMILE, 
+};
+const uint32_t PROGMEM unicode_map[] = {
+    [JAPANSMILE]  = 0x30C4,  // ツ
+};
 // Runs whenever there is a layer state change.
 uint32_t layer_state_set_user(uint32_t state) {
   ergodox_board_led_off();
@@ -112,8 +118,9 @@ enum custom_keycodes {
   M_GRV,
   M_BSLSH,
   M_FRLDQUOT,
-  M_FRRDQUOT
-
+  M_FRRDQUOT,
+  EYES,
+  DONTKNOW,
 };
 
 bool process_record_user(uint16_t keycode, keyrecord_t *record) {
@@ -293,6 +300,18 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
       } else {
       }
       break;
+     case EYES:
+       if (record->event.pressed) {
+        send_unicode_hex_string("0CA0 005F 0CA0"); // ಠ_ಠ
+      } else {
+      }
+      break;
+     case DONTKNOW:
+       if (record->event.pressed) {
+        send_unicode_hex_string("00AF 005C 005F 0028 30C4 0029 005F 002F 00AF"); // ¯\_(ツ)_/¯
+      } else {
+      }
+      break;
   }
   return true;
 };
@@ -360,8 +379,8 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
         KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS,
 
         // right
-        KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS,
-        KC_TRNS, KC_TRNS, M_UGRV,  M_ICIRC, M_OE,    KC_TRNS,    KC_MPLY,
+        KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, EYES, X(JAPANSMILE),
+        KC_TRNS, KC_TRNS, M_UGRV,  M_ICIRC, M_OE,    KC_TRNS,    DONTKNOW,
         KC_TRNS, KC_TRNS, M_ITRIM, KC_TRNS, KC_MNXT, KC_TRNS,
         KC_VOLU, KC_VOLD, KC_MUTE, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS,
         KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS,
