@@ -1,10 +1,12 @@
 #include QMK_KEYBOARD_H
-//#include "keymap_bepo.h"
+#include "version.h"
 
-//Interesting links
-//https://beta.docs.qmk.fm/features/feature_macros
+enum layers {
+    BASE,  // default layer
+    SYMB,  // symbols
+    MDIA,  // media keys
+};
 
-// Runs just one time when the keyboard initializes.
 void matrix_init_user(void) {
 #ifdef RGBLIGHT_COLOR_LAYER_0
   rgblight_setrgb(RGBLIGHT_COLOR_LAYER_0);
@@ -121,6 +123,7 @@ enum custom_keycodes {
   M_FRRDQUOT,
   EYES,
   DONTKNOW,
+  NBSP,
 };
 
 bool process_record_user(uint16_t keycode, keyrecord_t *record) {
@@ -312,6 +315,12 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
       } else {
       }
       break;
+      case NBSP:
+       if (record->event.pressed) {
+        send_unicode_hex_string("00A0"); // non breaking space (espace insécable)
+      } else {
+      }
+      break;
   }
   return true;
 };
@@ -326,8 +335,31 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
 #define FR_COMMA KC_M
 #define FR_POINTVIRGULE KC_COMM
 
+
+// clang-format off
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
-	[0] = LAYOUT_ergodox(
+/* Keymap 0: Basic layer
+ *
+ * ,--------------------------------------------------.           ,--------------------------------------------------.
+ * |  Esc/~ |   1  |   2  |   3  |   4  |   5  | `    |           |   6  |   7  |   8  |   9  |   0  |   =  |   -    |
+ * |--------+------+------+------+------+-------------|           |------+------+------+------+------+------+--------|
+ * | TAB    |   Q  |   W  |   E  |   R  |   T  |  [   |           |  ]   |   Y  |   U  |   I  |   O  |   P  |   \    |
+ * |--------+------+------+------+------+------|      |           |      |------+------+------+------+------+--------|
+ * | Lock   |   A  |   S  |   D  |   F  |   G  |------|           |------|   H  |   J  |   K  |   L  |  ;   |  '/¨   |
+ * |--------+------+------+------+------+------| MO2 |           | OSL 2|------+------+------+------+------+--------|
+ * | LShift |   Z  |   X  |   C  |   V  |   B  |      |           |      |   N  |   M  |   ,  |   .  |  /   | RShift |
+ * `--------+------+------+------+------+-------------'           `-------------+------+------+------+------+--------'
+ *   |Ctrl  |  Alt | Left | Right| Super|                                      |  Up  | Down |   [  |   ]  |Ctrl+Alt|
+ *   `----------------------------------'                                       `----------------------------------'
+ *                                        ,-------------.       ,-------------.
+ *                                        | MO1  | None |       |  Ins |  Del |
+ *                                 ,------|------|------|       |------+--------+------.
+ *                                 |      |      | Home |       | PgUp |        |      |
+ *                                 |BackSp| Del  |------|       |------|  Enter |Space |
+ *                                 | ace  |      | End  |       | PgDn |        |      |
+ *                                 `--------------------'       `----------------------'
+ */
+ 	[0] = LAYOUT_ergodox(
         //left
         KC_ESC,  KC_1,  KC_2,    KC_3,    KC_4,    KC_5,  KC_GRV,
         KC_TAB,  KC_Q,  KC_W,    KC_E,    KC_R,    KC_T,  KC_LBRC,
@@ -385,6 +417,13 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
         KC_VOLD, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS,
         KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS,
         //pouce
-        KC_TRNS, KC_MUTE, KC_TRNS, KC_TRNS, KC_TRNS, KC_WBAK)
+        KC_TRNS, KC_MUTE, KC_TRNS, KC_TRNS, KC_TRNS, NBSP)
 };
+// clang-format on
 
+// Runs just one time when the keyboard initializes.
+void keyboard_post_init_user(void) {
+#ifdef RGBLIGHT_COLOR_LAYER_0
+    rgblight_setrgb(RGBLIGHT_COLOR_LAYER_0);
+#endif
+};
