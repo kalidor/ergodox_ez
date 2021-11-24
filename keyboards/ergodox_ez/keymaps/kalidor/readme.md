@@ -13,3 +13,9 @@
 This is what we ship with out of the factory. :) The image says it all:
 
 ![Default](https://i.imgur.com/Be53jH7.png)
+
+## Compile
+
+`qmk clean && qmk compile`
+
+`qmk flash`

@@ -14,3 +14,7 @@ Don't forget to run : `make git-submodule` in order to be sure you get avery sub
 
 Since qmk release (i don't know when a nice way to create, build and flash the keyboard), i juste refresh all my keymaps.c.
 
+To compile and flash:
+
+- `qmk clean && qmk compile`
+- `qmk flash`
