@@ -361,40 +361,40 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 /* Keymap 0: Basic layer
  *
  * ,--------------------------------------------------.           ,--------------------------------------------------.
- * |    =   |   1  |   2  |   3  |   4  |   5  | Esc  |           |   '  |   6  |   7  |   8  |   9  |   0  |   -    |
+ * |   ESC  |   1  |   2  |   3  |   4  |   5  |   =  |           |   '  |   6  |   7  |   8  |   9  |   0  |   -    |
  * |--------+------+------+------+------+-------------|           |------+------+------+------+------+------+--------|
  * |  TAB   |   Q  |   W  |   E  |   R  |   T  |  [   |           |  ]   |   Y  |   U  |   I  |   O  |   P  |   \    |
  * |--------+------+------+------+------+------|      |           |      |------+------+------+------+------+--------|
- * |        |   A  |   S  |   D  |   F  |   G  |------|           |------|   H  |   J  |   K  |   L  |  ;   |   `    |
+ * |  AltGr |   A  |   S  |   D  |   F  |   G  |------|           |------|   H  |   J  |   K  |   L  |  ;   |   `    |
  * |--------+------+------+------+------+------| BSPC |           |  DEL |------+------+------+------+------+--------|
- * | Lock   |   Z  |   X  |   C  |   V  |   B  |      |           |      |   N  |   M  |   ,  |   .  |  /   | RShift |
+ * |  Lock  |   Z  |   X  |   C  |   V  |   B  |      |           |      |   N  |   M  |   ,  |   .  |  /   | RShift |
  * `--------+------+------+------+------+-------------'           `-------------+------+------+------+------+--------'
- *  |  Ctrl |  Alt | Left | Right| Super|                                      |  MO2  |  UP  | DOWN |      | AltGr |
+ *  |  Ctrl |  Alt |      |      | Super|                                      |  MO2  |  LEFT|  UP  | DOWN | RIGHT |
  *   `----------------------------------'                                       `-----------------------------------'
  *                                        ,-------------.       ,-------------.
  *                                        |      |      |       | Home |  End |
  *                                 ,------|------|------|       |------+--------+------.
  *                                 |      |      | Home |       | PGUP |        |      |
- *                                 | MO(1)| SP   |------|       |------|  Enter |Space |
- *                                 |      |INSEC | End  |       | PGDWN|        |      |
+ *                                 | BSPC |  MO1 |------|       |------|  Enter |Space |
+ *                                 |      |      | End  |       | PGDWN|        |      |
  *                                 `--------------------'       `----------------------'
  */
     [0] = LAYOUT_ergodox(
             //left
-            KC_EQL,  KC_1,  KC_2,    KC_3,    KC_4,    KC_5,  KC_ESC,
+            KC_ESC,  KC_1,  KC_2,    KC_3,    KC_4,    KC_5,  KC_EQL,
             KC_TAB,  KC_Q,  KC_W,    KC_E,    KC_R,    KC_T,  KC_LBRC,
-            KC_TRNS, KC_A,  KC_S,    KC_D,    KC_F,    KC_G,
+            KC_ALGR, KC_A,  KC_S,    KC_D,    KC_F,    KC_G,
             LSFT_T(KC_CAPS), KC_Z,  KC_X,    KC_C,    KC_V,    KC_B,  KC_BSPC,
             KC_LCTL, KC_LALT, KC_LEFT, KC_RIGHT, KC_LGUI,
             //pouce
-            KC_TRNS, KC_TRNS, KC_TRNS,  MO(1), X(SP_INSEC), KC_TRNS,
+            KC_TRNS, KC_TRNS, KC_TRNS, KC_BSPC, MO(1), KC_TRNS,
 
             //right
             KC_QUOT, KC_6,    KC_7,    KC_8,    KC_9,    KC_0,   KC_MINS,
             KC_RBRC, KC_Y,    KC_U,    KC_I,    KC_O,   KC_P,   KC_BSLS,
             KC_H,     KC_J,    KC_K,    KC_L,    KC_SCLN, KC_GRV,
             KC_DEL,    KC_N,    KC_M,    KC_COMM, KC_DOT,  KC_SLSH, KC_RSFT,
-            MO(2),   KC_UP , KC_DOWN,   KC_TRNS, KC_ALGR,
+            MO(2),   KC_LEFT, KC_UP , KC_DOWN,   KC_RIGHT,
             //pouce
             KC_HOME,    KC_END,   KC_PGUP, KC_PGDN, KC_ENTER, KC_SPC
             ),
@@ -469,7 +469,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
         KC_TRNS, KC_TRNS, KC_TRNS, M_CCDIL, KC_TRNS, KC_TRNS, KC_TRNS,
         KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS,
         //pouce
-        KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS,
+        KC_TRNS, KC_TRNS, KC_TRNS, X(SP_INSEC), KC_TRNS, KC_TRNS,
 
         // right
         KC_TRNS, X(BIERE), X(BIBERON), X(CHECK), X(UNCHECK), SMILE, DONTKNOW,
