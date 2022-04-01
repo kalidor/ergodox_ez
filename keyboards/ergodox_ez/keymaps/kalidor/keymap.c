@@ -25,9 +25,21 @@ void led_set_user(uint8_t usb_led) {
 
 enum unicode_names {
     JAPANSMILE, 
+    BIERE,
+    BIBERON,
+    CHECK,
+    UNCHECK,
+    SP_INSEC,
+    ALIEN,
 };
 const uint32_t PROGMEM unicode_map[] = {
     [JAPANSMILE]  = 0x30C4,  // ツ
+    [BIERE] = 0x1F37A,
+    [BIBERON] = 0x1F37C,
+    [CHECK] = 0x2705,
+    [UNCHECK] = 0x274C,
+    [SP_INSEC] = 0x00A0,
+    [ALIEN] = 0x1F47E,
 };
 // Runs whenever there is a layer state change.
 uint32_t layer_state_set_user(uint32_t state) {
@@ -84,7 +96,7 @@ uint32_t layer_state_set_user(uint32_t state) {
         ergodox_right_led_3_on();
         #ifdef RGBLIGHT_COLOR_LAYER_6
           rgblight_setrgb(RGBLIGHT_COLOR_LAYER_6);
-        #endif
+       #endif
         break;
       case 7:
         ergodox_right_led_1_on();
@@ -123,6 +135,7 @@ enum custom_keycodes {
   M_FRRDQUOT,
   EYES,
   DONTKNOW,
+  SMILE,
   NBSP,
 };
 
@@ -292,35 +305,43 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
         SEND_STRING(
               SS_RALT("[")
                 );
+        SEND_STRING(
+              SS_RALT(" ")
+                );
       } else {
       }
       break;
      case M_FRRDQUOT:
        if (record->event.pressed) {
         SEND_STRING(
+              SS_RALT(" ")
+                );
+        SEND_STRING(
               SS_RALT("]")
                 );
       } else {
       }
       break;
-     case EYES:
-       if (record->event.pressed) {
-        send_unicode_hex_string("0CA0 005F 0CA0"); // ಠ_ಠ
-      } else {
-      }
-      break;
+     //case EYES:
+     //  if (record->event.pressed) {
+     //   send_unicode_hex_string("0CA0 005F 0CA0"); // ಠ_ಠ
+     // } else {
+     // }
+     // break;
      case DONTKNOW:
        if (record->event.pressed) {
-        send_unicode_hex_string("00AF 005C 005F 0028 30C4 0029 005F 002F 00AF"); // ¯\_(ツ)_/¯
+        //send_unicode_hex_string("00AF 005C 005F 0028 30C4 0029 005F 002F 00AF"); // ¯\_(ツ)_/¯
+        send_unicode_string("¯\\_(ツ)_/¯");
       } else {
       }
       break;
-      case NBSP:
-       if (record->event.pressed) {
-        send_unicode_hex_string("00A0"); // non breaking space (espace insécable)
-      } else {
-      }
-      break;
+     case SMILE:
+      if (record->event.pressed) {
+       //send_unicode_hex_string("30C4"); // ツ
+       send_unicode_string("ツ");
+     } else {
+     }
+     break;
   }
   return true;
 };
@@ -335,89 +356,129 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
 #define FR_COMMA KC_M
 #define FR_POINTVIRGULE KC_COMM
 
-
 // clang-format off
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 /* Keymap 0: Basic layer
  *
  * ,--------------------------------------------------.           ,--------------------------------------------------.
- * |  Esc/~ |   1  |   2  |   3  |   4  |   5  | `    |           |   6  |   7  |   8  |   9  |   0  |   =  |   -    |
+ * |    =   |   1  |   2  |   3  |   4  |   5  | Esc  |           |   '  |   6  |   7  |   8  |   9  |   0  |   -    |
  * |--------+------+------+------+------+-------------|           |------+------+------+------+------+------+--------|
- * | TAB    |   Q  |   W  |   E  |   R  |   T  |  [   |           |  ]   |   Y  |   U  |   I  |   O  |   P  |   \    |
+ * |  TAB   |   Q  |   W  |   E  |   R  |   T  |  [   |           |  ]   |   Y  |   U  |   I  |   O  |   P  |   \    |
  * |--------+------+------+------+------+------|      |           |      |------+------+------+------+------+--------|
- * | Lock   |   A  |   S  |   D  |   F  |   G  |------|           |------|   H  |   J  |   K  |   L  |  ;   |  '/¨   |
- * |--------+------+------+------+------+------| MO2 |           | OSL 2|------+------+------+------+------+--------|
- * | LShift |   Z  |   X  |   C  |   V  |   B  |      |           |      |   N  |   M  |   ,  |   .  |  /   | RShift |
+ * |        |   A  |   S  |   D  |   F  |   G  |------|           |------|   H  |   J  |   K  |   L  |  ;   |   `    |
+ * |--------+------+------+------+------+------| BSPC |           |  DEL |------+------+------+------+------+--------|
+ * | Lock   |   Z  |   X  |   C  |   V  |   B  |      |           |      |   N  |   M  |   ,  |   .  |  /   | RShift |
  * `--------+------+------+------+------+-------------'           `-------------+------+------+------+------+--------'
- *   |Ctrl  |  Alt | Left | Right| Super|                                      |  Up  | Down |   [  |   ]  |Ctrl+Alt|
- *   `----------------------------------'                                       `----------------------------------'
+ *  |  Ctrl |  Alt | Left | Right| Super|                                      |  MO2  |  UP  | DOWN |      | AltGr |
+ *   `----------------------------------'                                       `-----------------------------------'
  *                                        ,-------------.       ,-------------.
- *                                        | MO1  | None |       |  Ins |  Del |
+ *                                        |      |      |       | Home |  End |
  *                                 ,------|------|------|       |------+--------+------.
- *                                 |      |      | Home |       | PgUp |        |      |
- *                                 |BackSp| Del  |------|       |------|  Enter |Space |
- *                                 | ace  |      | End  |       | PgDn |        |      |
+ *                                 |      |      | Home |       | PGUP |        |      |
+ *                                 | MO(1)| SP   |------|       |------|  Enter |Space |
+ *                                 |      |INSEC | End  |       | PGDWN|        |      |
  *                                 `--------------------'       `----------------------'
  */
- 	[0] = LAYOUT_ergodox(
-        //left
-        KC_ESC,  KC_1,  KC_2,    KC_3,    KC_4,    KC_5,  KC_GRV,
-        KC_TAB,  KC_Q,  KC_W,    KC_E,    KC_R,    KC_T,  KC_LBRC,
-        KC_TRNS, KC_A,  KC_S,    KC_D,    KC_F,    KC_G,
-        LSFT_T(KC_CAPS), KC_Z,  KC_X,    KC_C,    KC_V,    KC_B,  MO(2),
-        KC_LCTL, KC_LALT, KC_LEFT, KC_RIGHT, KC_LGUI,
-        //pouce
-        MO(1), KC_TRNS, KC_HOME,  KC_BSPC, KC_DEL, KC_END,
+    [0] = LAYOUT_ergodox(
+            //left
+            KC_EQL,  KC_1,  KC_2,    KC_3,    KC_4,    KC_5,  KC_ESC,
+            KC_TAB,  KC_Q,  KC_W,    KC_E,    KC_R,    KC_T,  KC_LBRC,
+            KC_TRNS, KC_A,  KC_S,    KC_D,    KC_F,    KC_G,
+            LSFT_T(KC_CAPS), KC_Z,  KC_X,    KC_C,    KC_V,    KC_B,  KC_BSPC,
+            KC_LCTL, KC_LALT, KC_LEFT, KC_RIGHT, KC_LGUI,
+            //pouce
+            KC_TRNS, KC_TRNS, KC_TRNS,  MO(1), X(SP_INSEC), KC_TRNS,
 
-        //right
-        KC_6,    KC_7,    KC_8,    KC_9,    KC_0,   KC_EQL, KC_MINS,
-        KC_RBRC, KC_Y,    KC_U,    KC_I,    KC_O,   KC_P,   KC_BSLS,
-        KC_H,     KC_J,    KC_K,    KC_L,    KC_SCLN, KC_QUOT,
-        OSL(2),    KC_N,    KC_M,    KC_COMM, KC_DOT,  KC_SLSH, KC_RSFT,
-        KC_UP,    KC_DOWN, KC_LBRC,   KC_RBRC, KC_RALT,
-        //pouce
-        KC_INS,    KC_DEL,   KC_PGUP, KC_PGDN, KC_ENTER, KC_SPC
-        ),
+            //right
+            KC_QUOT, KC_6,    KC_7,    KC_8,    KC_9,    KC_0,   KC_MINS,
+            KC_RBRC, KC_Y,    KC_U,    KC_I,    KC_O,   KC_P,   KC_BSLS,
+            KC_H,     KC_J,    KC_K,    KC_L,    KC_SCLN, KC_GRV,
+            KC_DEL,    KC_N,    KC_M,    KC_COMM, KC_DOT,  KC_SLSH, KC_RSFT,
+            MO(2),   KC_UP , KC_DOWN,   KC_TRNS, KC_ALGR,
+            //pouce
+            KC_HOME,    KC_END,   KC_PGUP, KC_PGDN, KC_ENTER, KC_SPC
+            ),
 
-        // RED
-	[1] = LAYOUT_ergodox(
-        //left
-        KC_ESC,   KC_F1,   KC_F2,   KC_F3,   KC_F4,   KC_F5,   M_BSLSH,
-        KC_NO,   KC_EXLM, KC_AT,   M_FRLDQUOT, M_FRRDQUOT, KC_PIPE, KC_TRNS,
-        KC_TRNS, KC_HASH, KC_DLR,  KC_LPRN, KC_RPRN, KC_GRV,
-        KC_TRNS, KC_PERC, KC_CIRC, KC_LBRC, KC_RBRC, KC_TRNS, KC_TRNS,
-        KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS,
+    // RED
+            /* Keymap 1: Basic layer
+             *
+             * ,--------------------------------------------------.           ,--------------------------------------------------.
+             * |        |   F1 |  F2  |  F3  |  F4  |  F5  |      |           |      |  F6  |  F7  |  F8  | F9  |  F10 |  F11   |
+             * |--------+------+------+------+------+-------------|           |------+------+------+------+------+------+--------|
+             * |        |      |      |      |      |      |      |           |      |      |      |      |      |      |  F12   |
+             * |--------+------+------+------+------+------|      |           |      |------+------+------+------+------+--------|
+             * |        |      |      |      |      |      |------|           |------|      |      |      |      |      |        |
+             * |--------+------+------+------+------+------|      |           |      |------+------+------+------+------+--------|
+             * |        |      |      |      |      |      |      |           |      |      | Prev |      |      |      |        |
+             * `--------+------+------+------+------+-------------'           `-------------+------+------+------+------+--------'
+             *   |      |      |      |      |      |                                       | Next |      |      |      |       |
+             *   `----------------------------------'                                       `----------------------------------'
+             *                                        ,-------------.       ,-------------.
+             *                                        |      |      |       |      |      |
+             *                                 ,------|------|------|       |------+--------+------.
+             *                                 |      |      |      |       |      |        |      |
+             *                                 |      |      |------|       |------| Vol-   | Vol+ |
+             *                                 |      |      |      |       |      |        |      |
+             *                                 `--------------------'       `----------------------'
+             */
+    [1] = LAYOUT_ergodox(
+            //left
+            KC_ESC,   KC_F1,   KC_F2,   KC_F3,   KC_F4,   KC_F5,   M_BSLSH,
+            KC_TRNS, KC_EXLM, KC_AT,   M_FRLDQUOT, M_FRRDQUOT, KC_PIPE, KC_TRNS,
+            KC_TRNS, KC_HASH, KC_DLR,  KC_LPRN, KC_RPRN, KC_GRV,
+            KC_TRNS, KC_PERC, KC_CIRC, LCTL(KC_C), LCTL(KC_V), KC_TRNS, KC_TRNS,
+            KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS,
+            //pouce
+            KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS,
+
+            //right
+            KC_TRNS,   KC_F6,   KC_F7,   KC_F8,   KC_F9,  KC_F10, KC_F11,
+            KC_TRNS, KC_TRNS,   KC_7,    KC_8,    KC_TRNS,    KC_MPLY, KC_F12,
+        KC_TRNS, KC_4,    KC_TRNS,    KC_LBRC,    KC_TRNS, KC_TRNS,
+        KC_TRNS, KC_TRNS, KC_MPRV,    KC_TRNS,    KC_TRNS, KC_TRNS, KC_TRNS,
+        KC_MNXT, KC_TRNS,  KC_TRNS, KC_TRNS, KC_TRNS,
         //pouce
-        RGB_MOD, KC_TRNS, KC_TRNS, RGB_VAD, RGB_VAI, KC_TRNS,
-        
-        //right
-        KC_F6,   KC_F7,   KC_F8,   KC_F9,   KC_F10,  KC_F11, KC_F12,
-        KC_TRNS, KC_UP,   KC_7,    KC_8,    KC_LCBR,    KC_RCBR, KC_TRNS,
-        KC_DOWN, KC_4,    KC_5,    KC_LBRC,    KC_RBRC, KC_TRNS,
-        KC_TRNS, KC_AMPR, KC_1,    KC_2,    KC_TRNS,    KC_UP, KC_TRNS,
-        KC_TRNS, KC_DOT,  KC_LEFT, KC_DOWN, KC_RIGHT,
-        //pouce
-        KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS),
+        KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_VOLD, KC_VOLU),
 
         // GREEN
+ /*
+ * ,--------------------------------------------------.           ,--------------------------------------------------.
+ * |    ~   |   «  |   »  |   "  |   '  |   €  |      |           |      |      |      |      |      |  ツ |¯\_(ツ)_/¯|
+ * |--------+------+------+------+------+-------------|           |------+------+------+------+------+------+--------|
+ * |        |  æ   |      |   é  |  è   |   ê  |      |           |      |      |  ù   |   î  |   œ  |   §  |    þ   |
+ * |--------+------+------+------+------+------|      |           |      |------+------+------+------+------+--------|
+ * |        |  à   |      |      |      |      |------|           |------|      |      |      |      |    |        |
+ * |--------+------+------+------+------+------|      |           |      |------+------+------+------+------+--------|
+ * |        |      |      |      |  ç   |      |      |           |      |      |      |  «   |   »  |      |        |
+ * `--------+------+------+------+------+-------------'           `-------------+------+------+------+------+--------'
+ *   |      |      |      |      |      |                                      |       |      |      |      |       |
+ *   `----------------------------------'                                       `----------------------------------'
+ *                                        ,-------------.       ,-------------.
+ *                                        |      |      |       |      |      |
+ *                                 ,------|------|------|       |------+--------+------.
+ *                                 |      |      |      |       |      |        |      |
+ *                                 |      |      |------|       |------|        |      |
+ *                                 |      |      |      |       |      |        |      |
+ *                                 `--------------------'       `----------------------'
+ */
 	[2] = LAYOUT_ergodox(
         //left
-        M_TILD,  KC_TRNS, KC_TRNS, M_DQUOT, M_SQUOT, KC_TRNS, KC_TRNS,
+        M_TILD, M_FRLDQUOT, M_FRRDQUOT,  M_DQUOT, M_SQUOT,RALT(KC_5), KC_TRNS, 
         KC_TRNS, M_AE, KC_TRNS, M_EAIG,  M_EGRV,  M_ECIRC, KC_TRNS, 
-        KC_TRNS, M_AGRV,  KC_TRNS,    KC_TRNS, KC_TRNS, KC_TRNS,
+        KC_TRNS, M_AGRV,  KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS,
         KC_TRNS, KC_TRNS, KC_TRNS, M_CCDIL, KC_TRNS, KC_TRNS, KC_TRNS,
         KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS,
         //pouce
         KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS,
 
         // right
-        KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, EYES, X(JAPANSMILE),
-        KC_VOLU, KC_TRNS, M_UGRV,  M_ICIRC, M_OE,    KC_TRNS,    DONTKNOW,
-        KC_TRNS, KC_TRNS, M_ITRIM, KC_TRNS, KC_MNXT, KC_TRNS,
-        KC_VOLD, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS,
+        KC_TRNS, X(BIERE), X(BIBERON), X(CHECK), X(UNCHECK), SMILE, DONTKNOW,
+        KC_TRNS, KC_TRNS, M_UGRV,  M_ICIRC, M_OE,   RSA(KC_S), RALT(KC_T),
+        KC_TRNS, KC_TRNS, KC_TRNS, LCTL(KC_L), KC_TRNS, X(ALIEN),
+        KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS,
         KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS,
         //pouce
-        KC_TRNS, KC_MUTE, KC_TRNS, KC_TRNS, KC_TRNS, NBSP)
+        KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, NBSP)
 };
 // clang-format on
 
@@ -427,3 +488,4 @@ void keyboard_post_init_user(void) {
     rgblight_setrgb(RGBLIGHT_COLOR_LAYER_0);
 #endif
 };
+
